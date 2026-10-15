@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://dxxmgpg82tqpw"]
+
+[ext_resource type="Script" uid="uid://cs1imrx13jnrf" path="res://scenes/intro.gd" id="1_ywiat"]
+[ext_resource type="Texture2D" uid="uid://bo5owjvoyekgg" path="res://ui/intro_bg.jpg" id="2_aqbct"]
+[ext_resource type="PackedScene" uid="uid://bdg55rloe222e" path="res://ui/DialogueBox.tscn" id="3_mkji7"]
+[ext_resource type="Texture2D" uid="uid://dg57de0lkdr4r" path="res://assets/characters/eva.png" id="4_eva"]
+[ext_resource type="Texture2D" uid="uid://lhq4p1r5f7oq" path="res://assets/characters/john_uz.png" id="5_john"]
+
+[node name="Intro" type="Control" unique_id=476095656]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ywiat")
+
+[node name="Background" type="TextureRect" parent="." unique_id=785439091]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_aqbct")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1397060058]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.05, 0.03, 0.02, 0.22)
+
+[node name="Eva" type="TextureRect" parent="." unique_id=1386331063]
+visible = false
+layout_mode = 0
+offset_left = -30.0
+offset_top = 40.0
+offset_right = 360.0
+offset_bottom = 560.0
+mouse_filter = 2
+texture = ExtResource("4_eva")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="JohnUz" type="TextureRect" parent="." unique_id=886821991]
+visible = false
+layout_mode = 0
+offset_left = 790.0
+offset_top = 20.0
+offset_right = 1190.0
+offset_bottom = 560.0
+mouse_filter = 2
+texture = ExtResource("5_john")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DialogueBox" parent="." unique_id=875371576 instance=ExtResource("3_mkji7")]
+layout_mode = 1
+offset_top = 1.0
+offset_bottom = 1.0

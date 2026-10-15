@@ -1,0 +1,217 @@
+[gd_scene format=3 uid="uid://n2d32brongp0"]
+
+[ext_resource type="Texture2D" uid="uid://pqg5l7v5rj7r" path="res://ui/map.png" id="1_5hauk"]
+[ext_resource type="Script" uid="uid://bsfwh8d0f1rec" path="res://scripts/Map.gd" id="1_lajc7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrivr"]
+bg_color = Color(0.14509805, 0.2784314, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b1lj4"]
+bg_color = Color(0.14509805, 0.2784314, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wi6ju"]
+bg_color = Color(0.14509805, 0.2784314, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7f2x3"]
+bg_color = Color(0.14509805, 0.2784314, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25bs2"]
+bg_color = Color(0.14509805, 0.2784314, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[node name="Map" type="Control" unique_id=456934194]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lajc7")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1936162940]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+
+[node name="MapImage" type="TextureRect" parent="." unique_id=1916082866]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 4.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_5hauk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="." unique_id=1240953534]
+layout_mode = 0
+offset_left = 119.0
+offset_top = 271.0
+offset_right = 400.0
+offset_bottom = 364.0
+theme_override_colors/font_color = Color(0.14509805, 0.2784314, 0.10980392, 1)
+theme_override_font_sizes/font_size = 32
+text = "Выбери 
+локацию"
+horizontal_alignment = 1
+
+[node name="PointsLabel" type="Label" parent="." unique_id=922369653]
+layout_mode = 0
+offset_left = 913.0
+offset_top = 262.0
+offset_right = 1008.0
+offset_bottom = 293.0
+theme_override_colors/font_color = Color(0.14509805, 0.2784314, 0.10980392, 1)
+theme_override_font_sizes/font_size = 22
+text = "Баллы: 0"
+
+[node name="StampsLabel" type="Label" parent="." unique_id=1510578253]
+layout_mode = 0
+offset_left = 893.0
+offset_top = 339.0
+offset_right = 1045.0
+offset_bottom = 370.0
+theme_override_colors/font_color = Color(0.14509805, 0.2784314, 0.10980392, 1)
+theme_override_font_sizes/font_size = 22
+text = "Штампы: 0 / 5"
+
+[node name="BtnBotanical" type="Button" parent="." unique_id=102512755]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_left = 555.0
+offset_top = 64.0
+offset_right = 622.0
+offset_bottom = 133.0
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_xrivr")
+text = "1"
+
+[node name="BtnMuseum" type="Button" parent="." unique_id=1246188543]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_left = 470.0
+offset_top = 183.0
+offset_right = 538.0
+offset_bottom = 253.0
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_b1lj4")
+text = "2"
+
+[node name="BtnMemory" type="Button" parent="." unique_id=1613762477]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_left = 615.0
+offset_top = 232.0
+offset_right = 686.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_wi6ju")
+text = "3"
+
+[node name="BtnMonument" type="Button" parent="." unique_id=1021559170]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_left = 509.0
+offset_top = 341.0
+offset_right = 581.0
+offset_bottom = 418.0
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_7f2x3")
+text = "4"
+
+[node name="BtnHistory" type="Button" parent="." unique_id=275462000]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 0
+offset_left = 603.0
+offset_top = 458.0
+offset_right = 679.0
+offset_bottom = 533.0
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_25bs2")
+text = "5"
+
+[node name="PassportButton" type="Button" parent="." unique_id=843365095]
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 0
+offset_left = 976.0
+offset_top = 21.0
+offset_right = 1126.0
+offset_bottom = 66.0
+text = "Паспорт"
+
+[node name="CertificateButton" type="Button" parent="." unique_id=1416713985]
+visible = false
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 0
+offset_left = 43.0
+offset_top = 23.0
+offset_right = 193.0
+offset_bottom = 68.0
+text = "Сертификат"
+
+[node name="MenuButton" type="Button" parent="." unique_id=938767401]
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 0
+offset_left = 800.0
+offset_top = 21.0
+offset_right = 950.0
+offset_bottom = 66.0
+text = "В меню"

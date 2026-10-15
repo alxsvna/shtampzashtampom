@@ -1,0 +1,284 @@
+[gd_scene format=3 uid="uid://bv7q6o7fucmie"]
+
+[ext_resource type="Script" uid="uid://dsgsn6r2gcmtb" path="res://scripts/MainMenu.gd" id="1_0ykhv"]
+[ext_resource type="Texture2D" uid="uid://dy1gnqfjb660x" path="res://ui/logo.png" id="1_yqorp"]
+[ext_resource type="Texture2D" uid="uid://dg57de0lkdr4r" path="res://assets/characters/eva.png" id="2_eva"]
+[ext_resource type="Texture2D" uid="uid://lhq4p1r5f7oq" path="res://assets/characters/john_uz.png" id="3_john"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b1lj4"]
+bg_color = Color(0.2901961, 0.56078434, 0.23529412, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84313726, 0.6509804, 0.38039216, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wi6ju"]
+bg_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njqwk"]
+bg_color = Color(0.84313726, 0.6509804, 0.38039216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_25bs2"]
+bg_color = Color(0.2901961, 0.56078434, 0.23529412, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84313726, 0.6509804, 0.38039216, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3662s"]
+bg_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vtrmx"]
+bg_color = Color(0.84313726, 0.6509804, 0.38039216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ae3m"]
+bg_color = Color(0.2901961, 0.56078434, 0.23529412, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84313726, 0.6509804, 0.38039216, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tg2s5"]
+bg_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mpdc"]
+bg_color = Color(0.84313726, 0.6509804, 0.38039216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ykhv"]
+bg_color = Color(0.92, 0.86, 0.78, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.28)
+shadow_size = 14
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ow34m"]
+bg_color = Color(0.2901961, 0.56078434, 0.23529412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2wh52"]
+bg_color = Color(0.92, 0.86, 0.78, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.28)
+shadow_size = 14
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l72w3"]
+bg_color = Color(0.2901961, 0.56078434, 0.23529412, 1)
+
+[node name="MainMenu" type="Control" unique_id=83174735]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0ykhv")
+
+[node name="Background" type="ColorRect" parent="." unique_id=963443719]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+
+[node name="Eva" type="TextureRect" parent="." unique_id=580101045]
+layout_mode = 0
+offset_left = -20.0
+offset_top = 120.0
+offset_right = 300.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture = ExtResource("2_eva")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="JohnUz" type="TextureRect" parent="." unique_id=86714521]
+layout_mode = 0
+offset_left = 850.0
+offset_top = 110.0
+offset_right = 1190.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture = ExtResource("3_john")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Logo" type="TextureRect" parent="." unique_id=1230274443]
+custom_minimum_size = Vector2(280, 280)
+layout_mode = 0
+offset_left = 303.0
+offset_top = -206.0
+offset_right = 868.0
+offset_bottom = 639.0
+texture = ExtResource("1_yqorp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Subtitle" type="Label" parent="." unique_id=117940746]
+layout_mode = 0
+offset_left = 308.0
+offset_top = 308.0
+offset_right = 865.0
+offset_bottom = 342.0
+theme_override_colors/font_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+theme_override_font_sizes/font_size = 24
+text = "Интерактивная экспедиция по родному краю"
+horizontal_alignment = 1
+
+[node name="Buttons" type="VBoxContainer" parent="." unique_id=2134195638]
+custom_minimum_size = Vector2(280, 200)
+layout_mode = 0
+offset_left = 465.0
+offset_top = 376.0
+offset_right = 745.0
+offset_bottom = 656.0
+theme_override_constants/separation = 20
+
+[node name="StartButton" type="Button" parent="Buttons" unique_id=26278449]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_b1lj4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_wi6ju")
+theme_override_styles/hover = SubResource("StyleBoxFlat_njqwk")
+text = "Начать маршрут"
+
+[node name="HowButton" type="Button" parent="Buttons" unique_id=109392927]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_25bs2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3662s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vtrmx")
+text = "Как играть"
+
+[node name="AboutButton" type="Button" parent="Buttons" unique_id=904172459]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_7ae3m")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tg2s5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7mpdc")
+text = "О проекте"
+
+[node name="HowPanel" type="Panel" parent="." unique_id=1795087487]
+visible = false
+custom_minimum_size = Vector2(600, 350)
+layout_mode = 0
+offset_left = 313.0
+offset_top = 192.0
+offset_right = 913.0
+offset_bottom = 542.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_0ykhv")
+
+[node name="HowText" type="Label" parent="HowPanel" unique_id=372465217]
+custom_minimum_size = Vector2(550, 300)
+layout_mode = 0
+offset_left = 59.0
+offset_top = 39.0
+offset_right = 609.0
+offset_bottom = 339.0
+theme_override_colors/font_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+theme_override_font_sizes/font_size = 18
+text = "1. Выбирай локацию на карте.
+2. Выполняй задания - отвечай на вопросы.
+3. За каждый правильный ответ - 10 очков и штамп.
+4. Собери все 5 штампов - получи сертификат."
+autowrap_mode = 2
+
+[node name="HowCloseButton" type="Button" parent="HowPanel" unique_id=1115872865]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 0
+offset_left = 237.0
+offset_top = 288.0
+offset_right = 357.0
+offset_bottom = 328.0
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_ow34m")
+text = "Закрыть"
+
+[node name="AboutPanel" type="Panel" parent="." unique_id=319905042]
+visible = false
+custom_minimum_size = Vector2(600, 350)
+layout_mode = 0
+offset_left = 294.0
+offset_top = 193.0
+offset_right = 894.0
+offset_bottom = 543.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_2wh52")
+
+[node name="AboutText" type="Label" parent="AboutPanel" unique_id=1656566033]
+custom_minimum_size = Vector2(550, 300)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 21.0
+offset_right = 580.0
+offset_bottom = 321.0
+theme_override_colors/font_color = Color(0.65882355, 0.4745098, 0.2627451, 1)
+theme_override_font_sizes/font_size = 18
+text = "Игра «Штамп за штампом» создана для знакомства
+с достопримечательностями Донецкой Народной Республики.
+
+Пять локаций: природа, искусство, память, труд, история.
+
+Игрок управляет Евой - она проходит маршрут
+и собирает штампы экспедиции."
+autowrap_mode = 2
+
+[node name="AboutCloseButton" type="Button" parent="AboutPanel" unique_id=1072682450]
+layout_mode = 0
+offset_left = 256.0
+offset_top = 293.0
+offset_right = 333.0
+offset_bottom = 324.0
+theme_override_colors/font_color = Color(0.85490197, 0.7764706, 0.69803923, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_l72w3")
+text = "Закрыть"

@@ -1,0 +1,139 @@
+extends Control
+
+@onready var dialogue_box: Control = $DialogueBox
+
+var questions: Array = [
+	{
+		"q": "Какова площадь Донецкого ботанического сада?",
+		"answers": ["Около 50 гектаров", "203 гектара", "Более 1000 гектаров"],
+		"correct": 1,
+		"hint": "Это один из крупнейших ботанических садов Европы."
+	},
+	{
+		"q": "Сколько видов и сортов растений собрано в саду?",
+		"answers": ["Около 500", "Более 7000", "Более 50 000"],
+		"correct": 1,
+		"hint": "Это настоящая живая энциклопедия флоры."
+	},
+	{
+		"q": "Какая коллекция в саду считается крупнейшей в регионе?",
+		"answers": ["Коллекция кактусов", "Коллекция хвойных-более 100 видов", "Коллекция орхидей"],
+		"correct": 1,
+		"hint": "Эти растения вечнозелёные, часто с иголками."
+	},
+	{
+		"q": "Сколько листов насчитывает научный гербарий сада?",
+		"answers": ["10 тысяч листов", "125 тысяч листов", "1 миллион листов"],
+		"correct": 1,
+		"hint": "Гербарий документирует флору края."
+	},
+	{
+		"q": "Какая экспозиция воссоздаёт природную зону региона?",
+		"answers": ["«Горы Кавказа»", "«Степи Донбасса»", "«Пустыни Средней Азии»"],
+		"correct": 1,
+		"hint": "Эта зона показывает, как выглядел регион до промышленного освоения."
+	}
+]
+
+var quiz_panel: Panel
+var quiz_label: Label
+var feedback_label: Label
+var answer_buttons: Array = []
+var current_question: int = 0
+var correct_answers: int = 0
+
+func _ready() -> void:
+	dialogue_box.dialogue_finished.connect(_on_dialogue_finished)
+	dialogue_box.start([
+		{"speaker": "Ева", "text": "Как красиво! Здесь столько разных растений. Неужели они все растут в одном месте?"},
+		{"speaker": "Джон ЮЗ", "text": "Донецкий ботанический сад-важное научное и природное учреждение. Здесь изучают растения, сохраняют разнообразие растительного мира."},
+		{"speaker": "Ева", "text": "Получается, это не только место для прогулок, но и пространство для науки и обучения!"},
+		{"speaker": "Джон ЮЗ", "text": "Именно так. Обращай внимание на детали: форма листьев, цветы, условия, в которых растут растения."},
+		{"speaker": "Джон ЮЗ", "text": "А теперь - задание. Пять вопросов о ботаническом саде. За каждый правильный ответ - 2 балла."}
+	])
+
+func _on_dialogue_finished() -> void:
+	_show_quiz()
+
+func _show_quiz() -> void:
+	quiz_panel = Panel.new()
+	quiz_panel.custom_minimum_size = Vector2(800, 420)
+	quiz_panel.position = Vector2(240, 120)
+	quiz_panel.modulate = Color(1, 1, 1, 0.96)
+	add_child(quiz_panel)
+
+	quiz_label = Label.new()
+	quiz_label.position = Vector2(30, 25)
+	quiz_label.custom_minimum_size = Vector2(740, 80)
+	quiz_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	quiz_label.add_theme_font_size_override("font_size", 20)
+	quiz_panel.add_child(quiz_label)
+
+	feedback_label = Label.new()
+	feedback_label.position = Vector2(30, 350)
+	feedback_label.custom_minimum_size = Vector2(740, 50)
+	feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	feedback_label.add_theme_font_size_override("font_size", 16)
+	quiz_panel.add_child(feedback_label)
+
+	answer_buttons.clear()
+	for i in range(3):
+		var btn := Button.new()
+		btn.custom_minimum_size = Vector2(740, 55)
+		btn.position = Vector2(30, 120 + i * 70)
+		btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		btn.pressed.connect(_on_answer.bind(i))
+		quiz_panel.add_child(btn)
+		answer_buttons.append(btn)
+
+	_load_question()
+
+func _load_question() -> void:
+	var q: Dictionary = questions[current_question]
+	quiz_label.text = "[%d/%d] %s" % [current_question + 1, questions.size(), q["q"]]
+	feedback_label.text = ""
+	for i in range(3):
+		answer_buttons[i].text = q["answers"][i]
+		answer_buttons[i].disabled = false
+
+func _on_answer(index: int) -> void:
+	var q: Dictionary = questions[current_question]
+	for btn in answer_buttons:
+		btn.disabled = true
+
+	if index == q["correct"]:
+		correct_answers += 1
+		GameState.add_points(GameState.POINTS_PER_ANSWER)
+		feedback_label.text = "Верно! +2 балла. " + q["hint"]
+		feedback_label.add_theme_color_override("font_color", Color("#4A8F3C"))
+	else:
+		feedback_label.text = "Не совсем. " + q["hint"]
+		feedback_label.add_theme_color_override("font_color", Color("#C76D5D"))
+
+	await get_tree().create_timer(2.0).timeout
+
+	current_question += 1
+	if current_question >= questions.size():
+		_finish_location()
+	else:
+		_load_question()
+
+func _finish_location() -> void:
+	quiz_panel.queue_free()
+
+	var earned := correct_answers * GameState.POINTS_PER_ANSWER
+	var final_text := "Правильных ответов: %d из %d\nЗаработано баллов: %d\n\nШтамп «Ботанический сад» - в паспорте!" % [correct_answers, questions.size(), earned]
+
+	var final_label := Label.new()
+	final_label.text = final_text
+	final_label.position = Vector2(240, 250)
+	final_label.custom_minimum_size = Vector2(800, 180)
+	final_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	final_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	final_label.add_theme_font_size_override("font_size", 22)
+	final_label.add_theme_color_override("font_color", Color("#3A2F28"))
+	add_child(final_label)
+
+	GameState.add_stamp("botanical")
+	await get_tree().create_timer(3.5).timeout
+	SceneManager.go_to_map()

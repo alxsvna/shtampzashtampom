@@ -1,0 +1,145 @@
+[gd_scene format=3 uid="uid://bmcpldoarcptu"]
+
+[ext_resource type="Texture2D" uid="uid://dxx0co4iuiosa" path="res://ui/history_bg.webp" id="1_t71gq"]
+[ext_resource type="PackedScene" uid="uid://bdg55rloe222e" path="res://ui/DialogueBox.tscn" id="2_w4huj"]
+
+[sub_resource type="GDScript" id="GDScript_ksiuh"]
+resource_name = "res://scripts/LocationHistory.gd"
+script/source = "extends Control
+
+@onready var dialogue_box: Control = $DialogueBox
+
+var questions: Array = [
+	{\"q\": \"Какие технологии используются в историческом парке?\", \"answers\": [\"Только книги\", \"Мультимедийные: проекции, 3D-панорамы\", \"Только фотографии\"], \"correct\": 1, \"hint\": \"Здесь история представлена современными средствами.\"},
+	{\"q\": \"Какая экспозиция рассказывает о древней династии?\", \"answers\": [\"«Рюриковичи»\", \"«Романовы»\", \"«1914–1945»\"], \"correct\": 0, \"hint\": \"Это одна из первых династий русских князей.\"},
+	{\"q\": \"Какая экспозиция посвящена эпохе империи?\", \"answers\": [\"«Рюриковичи»\", \"«Романовы»\", \"«1914–1945»\"], \"correct\": 1, \"hint\": \"Династия правила более 300 лет.\"},
+	{\"q\": \"Какая экспозиция рассказывает о событиях XX века?\", \"answers\": [\"«Рюриковичи»\", \"«Романовы»\", \"«1914–1945»\"], \"correct\": 2, \"hint\": \"Это период двух мировых войн.\"},
+	{\"q\": \"Чем парк особенно интересен для молодёжи?\", \"answers\": [\"Скучными лекциями\", \"Интерактивными приложениями и квестами\", \"Тишиной\"], \"correct\": 1, \"hint\": \"Здесь проходят профориентационные квесты.\"}
+]
+
+var quiz_panel: Panel
+var quiz_label: Label
+var feedback_label: Label
+var answer_buttons: Array = []
+var current_question: int = 0
+var correct_answers: int = 0
+
+func _ready() -> void:
+	dialogue_box.dialogue_finished.connect(_on_dialogue_finished)
+	dialogue_box.start([
+		{\"speaker\": \"Ева\", \"text\": \"Здесь история представлена так, будто можно пройти сквозь разные эпохи.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"Исторический парк использует мультимедийные материалы: проекционные пирамиды, 3D-панорамы, интерактивные приложения.\"},
+		{\"speaker\": \"Ева\", \"text\": \"Получается, чтобы понять настоящее, важно знать и прошлое.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"Совершенно верно. Экспозиции: «Рюриковичи», «Романовы», «1914–1945». А ещё здесь проходят профориентационные квесты.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"А теперь - задание. Пять вопросов о парке.\"}
+	])
+
+func _on_dialogue_finished() -> void:
+	_show_quiz()
+
+func _show_quiz() -> void:
+	quiz_panel = Panel.new()
+	quiz_panel.custom_minimum_size = Vector2(800, 420)
+	quiz_panel.position = Vector2(240, 120)
+	quiz_panel.modulate = Color(1, 1, 1, 0.96)
+	add_child(quiz_panel)
+
+	quiz_label = Label.new()
+	quiz_label.position = Vector2(30, 25)
+	quiz_label.custom_minimum_size = Vector2(740, 80)
+	quiz_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	quiz_label.add_theme_font_size_override(\"font_size\", 20)
+	quiz_panel.add_child(quiz_label)
+
+	feedback_label = Label.new()
+	feedback_label.position = Vector2(30, 350)
+	feedback_label.custom_minimum_size = Vector2(740, 50)
+	feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	feedback_label.add_theme_font_size_override(\"font_size\", 16)
+	quiz_panel.add_child(feedback_label)
+
+	answer_buttons.clear()
+	for i in range(3):
+		var btn := Button.new()
+		btn.custom_minimum_size = Vector2(740, 55)
+		btn.position = Vector2(30, 120 + i * 70)
+		btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		btn.pressed.connect(_on_answer.bind(i))
+		quiz_panel.add_child(btn)
+		answer_buttons.append(btn)
+
+	_load_question()
+
+func _load_question() -> void:
+	var q: Dictionary = questions[current_question]
+	quiz_label.text = \"[%d/%d] %s\" % [current_question + 1, questions.size(), q[\"q\"]]
+	feedback_label.text = \"\"
+	for i in range(3):
+		answer_buttons[i].text = q[\"answers\"][i]
+		answer_buttons[i].disabled = false
+
+func _on_answer(index: int) -> void:
+	var q: Dictionary = questions[current_question]
+	for btn in answer_buttons:
+		btn.disabled = true
+
+	if index == q[\"correct\"]:
+		correct_answers += 1
+		GameState.add_points(GameState.POINTS_PER_ANSWER)
+		feedback_label.text = \"Верно! +2 балла. \" + q[\"hint\"]
+		feedback_label.add_theme_color_override(\"font_color\", Color(\"#4A8F3C\"))
+	else:
+		feedback_label.text = \"Не совсем. \" + q[\"hint\"]
+		feedback_label.add_theme_color_override(\"font_color\", Color(\"#C76D5D\"))
+
+	await get_tree().create_timer(2.0).timeout
+
+	current_question += 1
+	if current_question >= questions.size():
+		_finish_location()
+	else:
+		_load_question()
+
+func _finish_location() -> void:
+	quiz_panel.queue_free()
+
+	var earned := correct_answers * GameState.POINTS_PER_ANSWER
+	var final_text := \"Правильных ответов: %d из %d\\nЗаработано баллов: %d\\n\\nШтамп «Исторический парк» — в паспорте!\" % [correct_answers, questions.size(), earned]
+
+	var final_label := Label.new()
+	final_label.text = final_text
+	final_label.position = Vector2(240, 250)
+	final_label.custom_minimum_size = Vector2(800, 180)
+	final_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	final_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	final_label.add_theme_font_size_override(\"font_size\", 22)
+	final_label.add_theme_color_override(\"font_color\", Color(\"#3A2F28\"))
+	add_child(final_label)
+
+	GameState.add_stamp(\"history\")
+	await get_tree().create_timer(3.5).timeout
+	SceneManager.go_to_map()
+"
+
+[node name="LocationMonument" type="Control" unique_id=596223989]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_ksiuh")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1794709082]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_t71gq")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DialogueBox" parent="." unique_id=875371576 instance=ExtResource("2_w4huj")]
+layout_mode = 1

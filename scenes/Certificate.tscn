@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://cwdo843ny1dil"]
+
+[ext_resource type="Texture2D" uid="uid://b6blsdmu7tu40" path="res://ui/certificate_bg.png" id="1_t4o6v"]
+
+[sub_resource type="GDScript" id="GDScript_xrivr"]
+resource_name = "res://scripts/Certificate.gd"
+script/source = "extends Control
+
+@onready var player_name: Label = $PlayerName
+@onready var date_label: Label = $DateLabel
+@onready var save_button: Button = $SaveButton
+@onready var menu_button: Button = $MenuButton
+
+func _ready() -> void:
+	player_name.text = GameState.player_name
+
+	var time := Time.get_datetime_dict_from_system()
+	date_label.text = \"%02d.%02d.%d\" % [time[\"day\"], time[\"month\"], time[\"year\"]]
+
+	save_button.pressed.connect(_on_save)
+	menu_button.pressed.connect(_on_menu)
+
+func _on_save() -> void:
+	
+	save_button.visible = false
+	menu_button.visible = false
+
+	await RenderingServer.frame_post_draw
+
+	var image := get_viewport().get_texture().get_image()
+
+	var dialog := FileDialog.new()
+	dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.add_filter(\"*.png\", \"PNG изображение\")
+	dialog.current_file = \"certificate.png\"
+	dialog.size = Vector2i(700, 500)
+	dialog.use_native_dialog = true
+	add_child(dialog)
+
+	dialog.file_selected.connect(func(path: String):
+		var result := image.save_png(path)
+		if result == OK:
+			print(\"Сертификат сохранён: \", path)
+		else:
+			print(\"Ошибка сохранения: \", result)
+		save_button.visible = true
+		menu_button.visible = true
+		dialog.queue_free()
+	)
+
+	dialog.canceled.connect(func():
+		save_button.visible = true
+		menu_button.visible = true
+		dialog.queue_free()
+	)
+
+	dialog.popup_centered()
+
+func _on_menu() -> void:
+	GameState.reset()
+	SceneManager.go_to_menu()
+"
+
+[node name="Certificate" type="Control" unique_id=1468492038]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_xrivr")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1107999549]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_t4o6v")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PlayerName" type="Label" parent="." unique_id=1444619010]
+custom_minimum_size = Vector2(800, 60)
+layout_mode = 0
+offset_left = 544.0
+offset_top = 374.0
+offset_right = 1344.0
+offset_bottom = 434.0
+theme_override_colors/font_color = Color(0.22745098, 0.18431373, 0.15686275, 1)
+theme_override_font_sizes/font_size = 40
+text = "ЕВА"
+
+[node name="DateLabel" type="Label" parent="." unique_id=1770964063]
+layout_mode = 0
+offset_left = 512.0
+offset_top = 559.0
+offset_right = 625.0
+offset_bottom = 590.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+text = "14.10.2026"
+
+[node name="SaveButton" type="Button" parent="." unique_id=2003074722]
+custom_minimum_size = Vector2(220, 50)
+layout_mode = 0
+offset_left = 45.0
+offset_top = 32.0
+offset_right = 265.0
+offset_bottom = 82.0
+text = "Скачать PNG"
+
+[node name="MenuButton" type="Button" parent="." unique_id=2115568845]
+custom_minimum_size = Vector2(220, 50)
+layout_mode = 0
+offset_left = 896.0
+offset_top = 26.0
+offset_right = 1116.0
+offset_bottom = 76.0
+text = "В главное меню"

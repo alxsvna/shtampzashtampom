@@ -1,0 +1,167 @@
+[gd_scene format=3 uid="uid://fh3r1x2pyfo"]
+
+[ext_resource type="Texture2D" uid="uid://b462ku3a30q3o" path="res://ui/museum_bg.png" id="1_n0wim"]
+[ext_resource type="PackedScene" uid="uid://bdg55rloe222e" path="res://ui/DialogueBox.tscn" id="2_td5ma"]
+
+[sub_resource type="GDScript" id="GDScript_w4huj"]
+script/source = "extends Control
+
+@onready var dialogue_box: Control = $DialogueBox
+
+const GRID_SIZE := 3
+const PIECE_SIZE := 100
+const BOARD_X := 490
+const BOARD_Y := 140
+
+var pieces: Array = []
+var selected_piece: TextureButton = null
+var moves: int = 0
+var hint_label: Label
+
+func _ready() -> void:
+	dialogue_box.dialogue_finished.connect(_on_dialogue_finished)
+	dialogue_box.start([
+		{\"speaker\": \"Ева\", \"text\": \"Здесь совсем другая атмосфера. У каждого произведения своя история.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"Художественный музей знакомит посетителей с живописью, графикой и скульптурой. В фондах-более 17 000 произведений.\"},
+		{\"speaker\": \"Ева\", \"text\": \"Значит, искусство тоже может рассказать историю места и людей.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"Конечно. В обновлённых залах выставлено 230 лучших работ. Недавно открылся зал балетного искусства.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"А теперь-задание. Собери картину из девяти фрагментов. Нажимай на два фрагмента, чтобы поменять их местами.\"}
+	])
+
+func _on_dialogue_finished() -> void:
+	_start_puzzle()
+
+func _start_puzzle() -> void:
+	hint_label = Label.new()
+	hint_label.text = \"Собери картину: нажми на два фрагмента, чтобы поменять их местами\\nХодов: 0\"
+	hint_label.position = Vector2(30, 30)
+	hint_label.custom_minimum_size = Vector2(700, 80)
+	hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint_label.add_theme_font_size_override(\"font_size\", 20)
+	hint_label.add_theme_color_override(\"font_color\", Color(\"#DAC6B2\"))
+	add_child(hint_label)
+
+	var original: Texture2D = load(\"res://ui/puzzle_picture.jpeg\")
+	if original==null:
+		push_error(\"Не найдена puzzle_picture.jpeg в res://ui/\")
+		return
+
+	var img: Image=original.get_image()
+	var full_size :=PIECE_SIZE * GRID_SIZE
+	img.resize(full_size, full_size, Image.INTERPOLATE_LANCZOS)
+	var texture: Texture2D = ImageTexture.create_from_image(img)
+
+	var piece_w :=full_size / GRID_SIZE
+	var piece_h :=full_size / GRID_SIZE
+
+	var indices := []
+	for i in range(GRID_SIZE * GRID_SIZE):
+		indices.append(i)
+	indices.shuffle()
+
+	var solved := true
+	for i in range(indices.size()):
+		if indices[i] != i:
+			solved = false
+			break
+	if solved:
+		indices.shuffle()
+
+	for i in range(GRID_SIZE * GRID_SIZE):
+		var row := i / GRID_SIZE
+		var col := i % GRID_SIZE
+
+		var src_index: int = indices[i]
+		var src_row: int = src_index / GRID_SIZE
+		var src_col: int = src_index % GRID_SIZE
+
+		var atlas := AtlasTexture.new()
+		atlas.atlas = texture
+		atlas.region = Rect2(src_col * piece_w, src_row * piece_h, piece_w, piece_h)
+
+		var btn := TextureButton.new()
+		btn.texture_normal = atlas
+		btn.size = Vector2(PIECE_SIZE, PIECE_SIZE)
+		btn.position = Vector2(BOARD_X + col * PIECE_SIZE, BOARD_Y + row * PIECE_SIZE)
+		btn.stretch_mode = TextureButton.STRETCH_SCALE
+		btn.set_meta(\"current_index\", src_index)
+		btn.pressed.connect(_on_piece_clicked.bind(btn))
+
+		add_child(btn)
+		pieces.append(btn)
+
+func _on_piece_clicked(btn: TextureButton) -> void:
+	if selected_piece == null:
+		selected_piece = btn
+		btn.modulate = Color(1.4, 1.4, 0.6)
+		return
+
+	if selected_piece == btn:
+		selected_piece.modulate = Color(1, 1, 1)
+		selected_piece = null
+		return
+
+	var tmp_texture: Texture2D = selected_piece.texture_normal
+	selected_piece.texture_normal = btn.texture_normal
+	btn.texture_normal = tmp_texture
+
+	var tmp_index: int = selected_piece.get_meta(\"current_index\")
+	selected_piece.set_meta(\"current_index\", btn.get_meta(\"current_index\"))
+	btn.set_meta(\"current_index\", tmp_index)
+
+	selected_piece.modulate = Color(1, 1, 1)
+	selected_piece = null
+
+	moves += 1
+	hint_label.text = \"Собери картину: нажми на два фрагмента, чтобы поменять их местами\\nХодов: %d\" % moves
+
+	if _is_solved():
+		await get_tree().create_timer(0.6).timeout
+		_finish_location()
+
+func _is_solved() -> bool:
+	for i in range(pieces.size()):
+		if pieces[i].get_meta(\"current_index\") != i:
+			return false
+	return true
+
+func _finish_location() -> void:
+	hint_label.queue_free()
+
+	var final_label := Label.new()
+	final_label.text = \"Картина собрана за %d ходов!\\nШтамп «Художественный музей» - в паспорте!\" % moves
+	final_label.position = Vector2(240, 580)
+	final_label.custom_minimum_size = Vector2(800, 80)
+	final_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	final_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	final_label.add_theme_font_size_override(\"font_size\", 22)
+	final_label.add_theme_color_override(\"font_color\", Color(\"#DAC6B2\"))
+	add_child(final_label)
+
+	GameState.add_stamp(\"museum\")
+	await get_tree().create_timer(3.0).timeout
+	SceneManager.go_to_map()
+"
+
+[node name="LocationMuseum" type="Control" unique_id=596223989]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_w4huj")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1794709082]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_n0wim")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DialogueBox" parent="." unique_id=875371576 instance=ExtResource("2_td5ma")]
+layout_mode = 1

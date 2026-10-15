@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://dkq5ar485unwp"]
+
+[ext_resource type="Script" uid="uid://c8a1k0h0cjo43" path="res://scenes/passport.gd" id="1_avehb"]
+[ext_resource type="Texture2D" uid="uid://cgf7iot6xnqlu" path="res://ui/passport_bg.png" id="2_efgyu"]
+[ext_resource type="Texture2D" uid="uid://df2lkj7rnyt86" path="res://ui/stamp.png" id="3_efgyu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r5hnh"]
+bg_color = Color(0.29411766, 0.49803922, 0.3882353, 0.45882353)
+
+[node name="Passport" type="Control" unique_id=663990905]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_avehb")
+
+[node name="Background" type="TextureRect" parent="." unique_id=812382023]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_efgyu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Stamp1" type="TextureRect" parent="." unique_id=1704451015]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 0
+offset_left = 535.0
+offset_top = -27.0
+offset_right = 870.0
+offset_bottom = 323.0
+texture = ExtResource("3_efgyu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Stamp2" type="TextureRect" parent="." unique_id=428669453]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 0
+offset_left = 797.0
+offset_top = -56.0
+offset_right = 1077.0
+offset_bottom = 339.0
+texture = ExtResource("3_efgyu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Stamp3" type="TextureRect" parent="." unique_id=646427272]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 0
+offset_left = 700.0
+offset_top = 110.0
+offset_right = 966.0
+offset_bottom = 491.0
+texture = ExtResource("3_efgyu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Stamp4" type="TextureRect" parent="." unique_id=755680331]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 0
+offset_left = 510.0
+offset_top = 259.0
+offset_right = 901.0
+offset_bottom = 649.0
+texture = ExtResource("3_efgyu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Stamp5" type="TextureRect" parent="." unique_id=1379267392]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 0
+offset_left = 711.0
+offset_top = 265.0
+offset_right = 1180.0
+offset_bottom = 639.0
+texture = ExtResource("3_efgyu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CounterLabel" type="Label" parent="." unique_id=474389811]
+layout_mode = 0
+offset_left = 679.0
+offset_top = 64.0
+offset_right = 938.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0.023529412, 0.023529412, 0.023529412, 1)
+theme_override_font_sizes/font_size = 22
+text = "Собрано штампов: 0 / 5"
+
+[node name="PointsLabel" type="Label" parent="." unique_id=684233121]
+layout_mode = 0
+offset_left = 764.0
+offset_top = 94.0
+offset_right = 859.0
+offset_bottom = 125.0
+theme_override_colors/font_color = Color(0.05882353, 0.05882353, 0.05490196, 1)
+theme_override_font_sizes/font_size = 22
+text = "Баллы: 0"
+
+[node name="BackButton" type="Button" parent="." unique_id=1106621107]
+custom_minimum_size = Vector2(200, 45)
+layout_mode = 0
+offset_left = 473.0
+offset_top = 588.0
+offset_right = 673.0
+offset_bottom = 633.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.78135127, 0.78264725, 0.69987196, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_r5hnh")
+text = "Назад на карту"

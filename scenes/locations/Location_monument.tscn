@@ -1,0 +1,170 @@
+[gd_scene format=3 uid="uid://caa4ge6i26tim"]
+
+[ext_resource type="Texture2D" uid="uid://cdoixy5wphk0x" path="res://ui/memory_bg.png" id="1_qrrrt"]
+[ext_resource type="PackedScene" uid="uid://bdg55rloe222e" path="res://ui/DialogueBox.tscn" id="2_5gqc6"]
+
+[sub_resource type="GDScript" id="GDScript_jtyfg"]
+resource_name = "res://scripts/LocationMemory.gd"
+script/source = "extends Control
+
+@onready var dialogue_box: Control = $DialogueBox
+
+var questions: Array = [
+	{
+		\"q\": \"Чему посвящена экспозиция музея?\",
+		\"answers\": [\"Подвигу советских подпольщиц\", \"Истории шахтёрского труда\", \"Природе Донбасса\"],
+		\"correct\": 0,
+		\"hint\": \"Они спасали узников лагеря смерти.\"
+	},
+	{
+		\"q\": \"Сколько подлинных предметов хранится в музее?\",
+		\"answers\": [\"150 предметов\", \"450 предметов\", \"1000 предметов\"],
+		\"correct\": 1,
+		\"hint\": \"Эти артефакты - свидетели истории.\"
+	},
+	{
+		\"q\": \"На территории какого бывшего лагеря расположен музей?\",
+		\"answers\": [\"«Освенцим»\", \"«Дулаг-162»\", \"«Бухенвальд»\"],
+		\"correct\": 1,
+		\"hint\": \"Это место трагедии и героизма.\"
+	},
+	{
+		\"q\": \"Какие технологии используются в экспозиции?\",
+		\"answers\": [\"Только статичные стенды\", \"Мультимедийные решения\", \"Только фотографии\"],
+		\"correct\": 1,
+		\"hint\": \"Современные технологии сочетаются с подлинными артефактами.\"
+	},
+	{
+		\"q\": \"Что символизирует это место для посетителей?\",
+		\"answers\": [\"Развлечение и отдых\", \"Память о цене мирной жизни\", \"Торговую площадку\"],
+		\"correct\": 1,
+		\"hint\": \"Здесь помнят о подвиге и жертвах.\"
+	}
+]
+
+var quiz_panel: Panel
+var quiz_label: Label
+var feedback_label: Label
+var answer_buttons: Array = []
+var current_question: int = 0
+var correct_answers: int = 0
+
+func _ready() -> void:
+	dialogue_box.dialogue_finished.connect(_on_dialogue_finished)
+	dialogue_box.start([
+		{\"speaker\": \"Ева\", \"text\": \"Здесь чувствуется, что это место хранит очень серьёзную память.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"Да. Музей героев подполья посвящён памяти людей, которые сопротивлялись оккупационному режиму во время Великой Отечественной войны.\"},
+		{\"speaker\": \"Ева\", \"text\": \"Такие места нужно посещать с уважением и помнить о том, что пережили люди.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"Верно. История - это не только даты и события. Это судьбы людей, их поступки и выбор. Здесь 450 подлинных предметов и мультимедийные решения.\"},
+		{\"speaker\": \"Джон ЮЗ\", \"text\": \"А теперь-задание. Пять вопросов о музее. За каждый правильный ответ -2 балла.\"}
+	])
+
+func _on_dialogue_finished() -> void:
+	_show_quiz()
+
+func _show_quiz() -> void:
+	quiz_panel = Panel.new()
+	quiz_panel.custom_minimum_size = Vector2(800, 420)
+	quiz_panel.position = Vector2(240, 120)
+	quiz_panel.modulate = Color(1, 1, 1, 0.96)
+	add_child(quiz_panel)
+
+	quiz_label = Label.new()
+	quiz_label.position = Vector2(30, 25)
+	quiz_label.custom_minimum_size = Vector2(740, 80)
+	quiz_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	quiz_label.add_theme_font_size_override(\"font_size\", 20)
+	quiz_panel.add_child(quiz_label)
+
+	feedback_label = Label.new()
+	feedback_label.position = Vector2(30, 350)
+	feedback_label.custom_minimum_size = Vector2(740, 50)
+	feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	feedback_label.add_theme_font_size_override(\"font_size\", 16)
+	quiz_panel.add_child(feedback_label)
+
+	answer_buttons.clear()
+	for i in range(3):
+		var btn := Button.new()
+		btn.custom_minimum_size = Vector2(740, 55)
+		btn.position = Vector2(30, 120 + i * 70)
+		btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		btn.pressed.connect(_on_answer.bind(i))
+		quiz_panel.add_child(btn)
+		answer_buttons.append(btn)
+
+	_load_question()
+
+func _load_question() -> void:
+	var q: Dictionary = questions[current_question]
+	quiz_label.text = \"[%d/%d] %s\" % [current_question + 1, questions.size(), q[\"q\"]]
+	feedback_label.text = \"\"
+	for i in range(3):
+		answer_buttons[i].text = q[\"answers\"][i]
+		answer_buttons[i].disabled = false
+
+func _on_answer(index: int) -> void:
+	var q: Dictionary = questions[current_question]
+	for btn in answer_buttons:
+		btn.disabled = true
+
+	if index == q[\"correct\"]:
+		correct_answers += 1
+		GameState.add_points(GameState.POINTS_PER_ANSWER)
+		feedback_label.text = \"Верно! +2 балла. \" + q[\"hint\"]
+		feedback_label.add_theme_color_override(\"font_color\", Color(\"#4A8F3C\"))
+	else:
+		feedback_label.text = \"Не совсем. \" + q[\"hint\"]
+		feedback_label.add_theme_color_override(\"font_color\", Color(\"#C76D5D\"))
+
+	await get_tree().create_timer(2.0).timeout
+
+	current_question += 1
+	if current_question >= questions.size():
+		_finish_location()
+	else:
+		_load_question()
+
+func _finish_location() -> void:
+	quiz_panel.queue_free()
+
+	var earned := correct_answers * GameState.POINTS_PER_ANSWER
+	var final_text := \"Правильных ответов: %d из %d\\nЗаработано баллов: %d\\n\\nШтамп «Музей памяти» -в паспорте!\" % [correct_answers, questions.size(), earned]
+
+	var final_label := Label.new()
+	final_label.text = final_text
+	final_label.position = Vector2(240, 250)
+	final_label.custom_minimum_size = Vector2(800, 180)
+	final_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	final_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	final_label.add_theme_font_size_override(\"font_size\", 22)
+	final_label.add_theme_color_override(\"font_color\", Color(\"#3A2F28\"))
+	add_child(final_label)
+
+	GameState.add_stamp(\"memory\")
+	await get_tree().create_timer(3.5).timeout
+	SceneManager.go_to_map()
+"
+
+[node name="LocationMemory" type="Control" unique_id=596223989]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_jtyfg")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1794709082]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_qrrrt")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DialogueBox" parent="." unique_id=875371576 instance=ExtResource("2_5gqc6")]
+layout_mode = 1
